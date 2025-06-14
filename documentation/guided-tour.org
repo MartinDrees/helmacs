@@ -1,0 +1,373 @@
+* Introduction
+Welcome to this guided tour of the Emacs configuration! This guide will help you:
+
+- Learn the core features of this Emacs setup
+- Understand key workflows and navigation techniques
+- Discover powerful tools that make Emacs efficient
+
+The purpose of this guide is to show you what's available in this configuration and provide recommendations on how to use it effectively. It's designed to help you explore the possibilities and find the workflows that work best for you.
+
+As you read through this guide, try each example to build muscle memory.
+
+This configuration balances vanilla Emacs principles with modern enhancements and (optional) modal editing.
+
+* Key Terminology
+
+Emacs dates back to the 1970s and has developed its own unique vocabulary over decades. Some terminology might seem unusual compared to modern editors:
+For now, just briefly skim through this table and come back here when you encounter unclear terminology.
+
+| Term       | Description                                                                                              |
+|------------+----------------------------------------------------------------------------------------------------------|
+| Buffer     | Text container (may be linked to a file or temporary)                                                    |
+| Window     | A view into a buffer                                                                                     |
+| Frame      | The entire Emacs application window                                                                      |
+| Point      | Cursor position (always between characters)                                                              |
+| Mark       | Invisible position marker setting one end of the region (see below)                                      |
+| Region     | Selected text between point and mark                                                                     |
+| Kill       | Cut (text is saved to the kill ring)                                                                     |
+| Yank       | Paste (inserts text from kill ring)                                                                      |
+| Major Mode | Primary editing mode for a buffer; determines syntax highlighting, indentation, and specialized commands |
+| Minor Mode | Additional feature that can be enabled in any buffer; adds functionality without changing the major mode |
+| Minibuffer | Command/input area at the bottom of the frame                                                            |
+
+* Essentials
+~M-~ stands for Meta key (Alt on most keyboards). So ~M-x~ stands for pressing "x" while holding down Alt.
+~C-~ stands for Control key. So ~C-n~ stands for pressing "n" while holding down Ctrl.
+
+Essential commands:
+- ~M-x~ : Execute any command by name (If you don't like to type this, you can also use ~SPC e~, so <space> followed by "e")
+- ~C-g~ : Cancel current operation (universal escape)
+
+Try: Type ~M-x cheatsheet-space-menu~, take a brief look and close the menu with ~C-g~.
+When typing the command, you will see "SPC ?" indicated next to the command. This means that there is a keybinding for this command.
+Try it by pressing <space> and "?" and exit the cheatsheet again.
+
+When using ~M-x~, a *minibuffer* with a vertical completion interface appears showing:
+- Command descriptions on the right
+- Available keybindings (if any)
+- Matching based on "orderless" completion: type substrings in any order
+- Use ~!~ before a substring to exclude matches containing it
+
+Try: Type ~M-x modifier cheatsheet~ (to find "cheatsheet-modifier-commands") and take a brief look at this cheatsheet.
+You can start learning these keybindings, which makes sense if you prefer keyboard-driven navigation.
+But you can also use the mouse.
+
+Note: ~C-n~ and ~C-p~ work almost everywhere (also in minibuffer)
+
+* Modal Editing (meow)
+In modal editing, keys don't insert text by default but trigger commands instead. This frees up the entire keyboard for efficient editing operations.
+
+Key commands:
+- ~?~ : Open cheatsheet showing all modal editing commands
+- ~i~ : Enter insert mode (for typing text)
+- ~ESC~ : Exit insert mode, return to normal mode
+- ~u~ : Undo
+
+Try: Press ~i~, type some text, press ~ESC~ to exit insert mode, then press ~u~ to undo
+
+Note: The cursor shape indicates your current mode (block in normal mode, thin line in insert mode). In normal mode, the cursor position is the same as in insert mode - between characters.
+
+Modal editing can be toggled with meow-global-mode (try it, twice). This configuration works well without modal editing, but trying modal editing is recommended for experiencing its efficiency benefits.
+
+Try this line deletion workflow:
+1. Make sure you're in normal mode (press ~ESC~ if needed)
+2. Press ~l~ to select the current line
+3. Press ~k~ to kill (delete) the selected line
+4. Press ~u~ to undo the deletion and restore the line
+
+** Navigation with Avy
+- ~j~ : Jump to any visible text by typing two characters (~avy-goto-char-2~)
+
+Avy allows you to jump to any location on screen. You start avy and type two consecutive characters on screen where you want to jump to. Then some overlays will appear at all possible locations.
+You can then type the indicated characters to jump there.
+
+Try:
+1. Look at a location in your buffer where you want to jump (e.g., the word "Example" in this section)
+2. Press ~j~ in normal mode to activate ~avy-goto-char-2~
+3. Type the first two characters of your target (e.g., "Ex" for "Example")
+4. Avy will display colored indicators at all occurrences of "Ex" in the visible buffer
+5. Press the indicator key(s) shown at your desired location to instantly jump there
+   - If there are many matches, you might need to press 2-3 keys shown in the indicator
+   - For fewer matches, often just a single key is needed
+
+This makes navigation incredibly fast once you get used to it!
+
+* Space Menu
+The space menu (accessed by pressing ~SPC~ in normal mode, or always with ~F5~) collects essential commands organized into categories.
+Press ~C-h~ to get searchable vertical completion with the keybindings.
+In the beginning it might be more helpful to view commands in categories. For this you can use "?" from the space menu.
+
+Most features covered in this guided tour are accessible through this menu, making it the central navigation point for the configuration.
+
+Try: Open the space menu from insert mode and use avy (~F5 j~, or ~F5 ? j~ or alternatively ~F5 C-h~ type "avy" and Enter).
+
+* Consult Buffer
+~consult-buffer~ (accessed via ~b~ in the space menu) is your general purpose tool for switching between buffers.
+
+Use ~consult-buffer~ to return to this guide tour whenever you navigate away. Simply start the space menu, press ~b~, and select the Guided Tour buffer.
+
+Try: Open another buffer, then return to this guide
+
+Note: Naturally, quite many buffers will be open at some point, but this is not that relevant.
+If you just want to switch to the last buffer, you can use ~a~ in the space menu.
+
+* Windows
+The window commands in the space menu are self-explanatory. Try them out to see what happens.
+
+You can display the same buffer in multiple windows:
+- Use the space menu to split the window
+- Insert text in one window and observe it appears in both
+- Undo the changes
+- Delete windows to keep only one version of the guide
+
+* Directory Editor (dired)
+The DIRectory EDitor (accessed via ~d~ in the space menu) allows you to:
+- Navigate through directories
+- View, open, delete, rename, and copy files
+- Perform operations on multiple files
+
+Note: In dired, keys execute directory-specific commands rather than normal editing commands. This specialized mode makes file management efficient. The space menu can still be accessed via ~SPC~.
+
+Try: Enter dired (~SPC d~) and navigate with the mouse, by clicking on directories (click on ".." for parent directory).
+
+* Finding Files
+Find File (accessed via ~f~ in the space menu) is a general purpose tool to:
+- Open existing files and directories (navigate by deleting parts of the path and TAB completion)
+- Create new files by entering a name that doesn't exist yet
+
+Try this:
+0. Split the window to still view this guide
+1. Use Find File (~f~ in space menu) to create a new file called test.txt
+2. Add some text and save it (click on "Save" or ~C-x C-s~)
+3. Open dired (~d~ in space menu)
+4. Navigate to test.txt, this means to have the cursor at the position of test.txt in the directory editor
+5. Call ~dired-do-delete~
+6. Confirm when prompted
+
+You can also just start typing the full path to the file, even when there is another directory in the prompt.
+
+Try this:
+1. Use dired to navigate to a directory far away from your home directory
+2. Start ~find-file~ (~SPC f~)
+3. Type "~/.emacs.d/myinit.org" and Enter
+
+* Consult
+Consult provides enhanced tools with live previews.
+
+The space menu includes common Consult tools, but many more are available. To discover them:
+- Type ~M-x consult~ (no Enter) to see all Consult commands (no need to browse them now)
+
+** Consult Bookmark
+Bookmarks provide quick navigation to frequently used locations - directories, files, or even specific positions within files.
+
+To create a bookmark:
+1. Navigate to a location using ~find-file~ or the Directory Editor (dired)
+2. Access Consult Bookmark with ~B~ from the space menu
+3. Type a new name to create a bookmark (the preview might appear confusing when creating new bookmarks)
+
+Select existing bookmarks to jump to them
+
+Try: Create bookmarks for these useful locations:
+- Your home directory: In the directory editor, go to your home directory, then start ~consult-bookmark~
+- Emacs configuration file (~/.emacs.d/myinit.org)
+- Scripts directory (~/.local/bin)
+
+Call ~bookmark-save~ at the end to ensure that they are saved (not strictly necessary, but you would lose them if the emacs process gets killed)
+
+** Consult Line
+~consult-line~ quickly locates and jumps to a line in the current buffer:
+
+Try: Use ~consult-line~ to find different sections in this guide document.
+
+** Consult rg (Ripgrep)
+This tool is very powerful, but there will be quite some information. Try it out once and come back to this guided tour to revisit features.
+
+ripgrep is a command line tool. Call ~shell-command~ and execute ~rg -h~ to call the help of this tool. Read through the brief introduction.
+
+~consult-ripgrep~ uses ~rg~. How it works:
+1. Launches an interactive recursive search starting in:
+   - The project root (e.g., root of a Git repository)
+   - The current directory (if not in a project)
+2. Type your search term to see results update in real-time
+   - Be patient and wait for results - don't press Enter while typing
+   - For large projects or many directories, the search may take a few moments to complete
+3. Modify your search with advanced features:
+   - Use ~--~ followed by ripgrep arguments to customize the search
+     Example: ~query -- -g *.js~ (search only in JavaScript files)
+   - After typing your search, add ~#~ to switch to Orderless completion
+
+Try:
+0. Split the window to still view this guide
+1. Go to your emacsconfig bookmark (this is a symlink to a git repo)
+2. Start ~consult-ripgrep~ and search for a term (e.g. "consult")
+3. Add ~-- -g *.org~ to limit search to org files
+4. Further refine with ~#!try~ to exclude results containing "try"
+
+~consult-ripgrep~ sets some extra arguments to ~rg~. Try out running ~describe-variable~ and enter ~consult-ripgrep-args~ to check them out.
+
+** Consult fd
+~consult-fd~ (accessed via ~F~ in the space menu) quickly finds files recursively by name across directories:
+- Uses the fast fd tool
+- Searches for files and directories
+- Handles large directory structures efficiently
+
+How it works:
+1. Launches an interactive recursive file search starting in:
+   - The Git project root (if in a Git repository)
+   - The current directory (if not in a project)
+2. Type part of a filename to see matching files update in real-time
+   - Be patient and wait for results - don't press Enter while typing
+   - For large directories, the search may take a few moments to complete
+3. Modify your search with advanced features:
+   - Use ~--~ followed by fd arguments to customize the search
+     Example: ~--type d~ (search only for directories)
+   - After typing your search, add ~#~ to switch to Orderless completion
+     Example: ~config#!temp~ (filter results to show files with "config" but excluding "temp")
+
+Try:
+Go to code project and search for a file you are frequently using and set a bookmark.
+
+* Navigation summary
+Here is a quick summary of navigation commands for different scopes:
+|---------------------------+------------------------------+---------|
+| Basic movement            | cheatsheet-modifier-commands | ~C-c m~ |
+| Screen                    | avy-goto-char-2              | ~SPC j~ |
+| Line in file              | consult-line                 | ~SPC l~ |
+| Line in project/recursive | consult-ripgrep              | ~SPC s~ |
+| File                      | find-file                    | ~SPC f~ |
+| File in project/recursive | consult-fd                   | ~SPC F~ |
+| Buffer (or recent file)   | consult-buffer               | ~SPC b~ |
+| Bookmark                  | consult-bookmark             | ~SPC B~ |
+|---------------------------+------------------------------+---------|
+
+* Org Mode
+Org Mode is a powerful markup and organizational system (this guided tour is written in Org Mode).
+
+While beyond the scope of this tour, Org Mode offers:
+- Document structuring with collapsible sections (try ~TAB~ on a heading)
+- Task management with TODO states
+- Tables with spreadsheet capabilities
+- Code blocks that can be executed
+- Export to various formats (HTML, PDF, etc.)
+- ...
+
+Try this: ~outline-next-visible-heading~
+1. Search the command ~outline-next-visible-heading~
+2. Note its key binding (~C-c C-n~)
+3. Press ~C-g~ to close the bindings buffer
+4. Try the command with ~C-c C-n~ to jump to the next heading
+5. In normal mode, this can also be accessed with the keypad: press ~c n~ (explained in the Keypad section)
+
+* Magit
+Magit is a powerful keyboard-driven Git interface, accessible via ~G~ in the space menu when inside a Git-controlled project.
+
+Key features:
+- Complete Git functionality without leaving Emacs
+- Intuitive interface with contextual commands
+- Efficient staging, committing, and branching
+- Press ~?~ in any Magit buffer to see available commands
+
+This guided tour isn't focused on Git workflows, but Magit makes version control seamless within Emacs.
+
+* Embark
+Embark provides a general mechanism to perform actions on selections.
+
+** Buffer Actions
+Embark provides powerful contextual actions in regular buffers:
+
+In normal mode, press ~.~ on any identifier, symbol, or text to see contextual actions including:
+- Go to definition
+- Find references
+
+For even faster operation, use ~embark-dwim~ (Embark do-what-I-mean) to immediately perform the most likely action - "go to definition" for code symbols.
+
+Try: Open a code file, place cursor on a function or variable name, and:
+1. Press ~.~ to see available actions
+2. Try ~xref-find-references~ to see where it's used
+3. Use ~M-.~ on another symbol to directly jump to its definition
+
+** Minibuffer actions
+In the minibuffer (during completion), Embark is especially powerful:
+- Instead of selecting a candidate with Enter, press ~C-.~ for alternate actions
+- If the menu seems overwhelming, press ~C-h~ for a vertical completion interface
+
+Try this:
+1. Start ~find-file~
+2. Navigate to a file but don't press Enter
+3. Press ~C-.~ to see Embark actions for that file (~C-.~ might not work in your Desktop Manager, then use ~M-x embark-act~ from the minibuffer and consider using a less bloated desktop manager 😀)
+4. Press ~C-h~ for vertical completion
+5. Find and select the ~embark-copy-as-kill~ action
+6. The filename is now in your clipboard (kill-ring in emacs)
+
+** Export Mechanic
+One of Embark's most powerful features is its ability to export completion candidates to dedicated buffers:
+
+Try this:
+1. Type ~M-x consult-~
+2. Instead of selecting a command, press ~C-.~
+3. Press ~C-h~ to get the vertical completion interface
+4. Find and select ~embark-export~
+5. You now have a buffer with all Consult commands for further manipulation
+
+This export mechanic is general - it works with file lists (exports to Dired), search results (exports to grep buffers), and many other contexts.
+
+* Keypad
+The keypad is a powerful mechanic that saves you from using modifier keys (like Ctrl) for common commands.
+
+Key concept: Instead of pressing key combinations simultaneously, press keys in sequence.
+
+How it works:
+1. Activate the keypad with one of these methods:
+   - Press ~h~ in normal mode
+   - Press ~SPC h~ using the space menu
+   - Press ~C-c h~ from anywhere
+   - Call ~meow-keypad~
+
+2. Press any letter key, and it's translated to ~C-c~ + that letter
+   - Exception: The special keys x, c, g, h, m have different functions:
+     - ~x~ starts C-x prefix (for standard Emacs commands)
+       Everything typed after x will have Ctrl applied to it
+       Example: ~h x s~ translates to ~C-x C-s~ (~save-buffer~)
+     - ~c~ starts C-c prefix (for mode-specific commands)
+       Everything typed after c will have Ctrl applied to it
+       Example: ~h c n~ translates to ~C-c C-n~ (~org-next-visible-heading~)
+     - ~g~ starts C-M- prefix (Control+Meta modifier combination)
+       Example: ~h g f~ translates to ~C-M-f~ (~forward-sexp~)
+     - ~m~ starts M- prefix (Meta modifier)
+       Example: ~h m f~ translates to ~M-f~ (~forward-word~)
+     - ~h~ activates help
+
+   - You can use ~SPC~ after ~x~ or ~c~ to strip off further modifiers:
+     Example: ~h x SPC t~ translates to ~C-x t~ (without Control on the t)
+     Example: ~h c SPC t~ translates to ~C-c t~ (without Control on the t)
+
+3. Direct prefix access from normal mode:
+   In normal mode, you can directly press x, c or g to start the keypad with that prefix already active.
+   - ~x s~ in normal mode translates to ~C-x C-s~ (save buffer)
+   - ~c n~ in normal mode translates to ~C-c C-n~ (~org-next-visible-heading~)
+   - ~g f~ in normal mode translates to ~C-M-f~ (~forward-sexp~)
+
+This is why commands like ~c n~ and ~c p~ work directly in normal mode to navigate in Org mode.
+
+Try these examples:
+1. Save buffer:
+   - Traditional way: ~C-x C-s~
+   - Keypad way: Press ~h~ then ~x s~
+   - Direct way: Press ~x s~ in normal mode
+
+2. Try Org Mode navigation:
+   - Traditional way: ~C-c C-n~ (~org-next-visible-heading~)
+   - Keypad way: Press ~h~ then ~c n~
+   - Direct way: Press ~c n~ in normal mode
+
+Also try the following example:
+1. Evaluate the following emacs lisp source block by selecting the line of code (~l~), running (embark-act) (~.~) then ~C-h~ and call ~eval-region~ to evaluate the code.
+#+begin_src emacs-lisp
+  (define-key global-map (kbd "C-c s") #'shell-command)
+#+end_src
+2. Try running ~shell-command~ by pressing ~C-c s~ (first press ~c~ while holding Ctrl, then release Ctrl and press ~s~), then quit it.
+3. Now run it via the keypad, by pressing ~h s~.
+4. Restarting emacs (~restart-emacs~) will disable that keybinding again.
+
+* After this guide
+You can check out ~M-x further-learning~ for a recommended further learning path and ~M-x configuration~ for some information on this configuration and customization recommendations.

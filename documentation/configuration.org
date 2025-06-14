@@ -1,0 +1,66 @@
+* Configuration
+This configuration follows a core philosophy: stay close to vanilla Emacs while adding selective enhancements. This ensures:
+- Compatibility with standard Emacs documentation and tutorials
+- Transferable knowledge between this setup and other Emacs installations
+- Stable experience with minimal conflicts between packages
+
+** External Packages
+The configuration uses a carefully selected set of packages:
+
+- Meow: Modal editing
+- Vertico/Marginalia/Orderless/Consult: Modern completion framework
+- Embark: Context-sensitive actions on anything
+- Avy: Fast navigation to visible text
+- Magit: Git integration
+- Expand-region: Smart text selection
+
+Each package is configured quite minimally to work harmoniously with vanilla Emacs patterns.
+
+** Customization
+The configuration is designed to be extended. Here are two simple ways to customize your experience:
+
+*** Keybindings
+The safest and most recommended way to add your own keybindings is using the ~C-c~ prefix followed by a letter, which is reserved for user customizations by Emacs convention.
+
+Example:
+#+begin_src emacs-lisp
+  ;; Examples of how to define keybindings
+  (define-key global-map (kbd "C-c t") #'your-favorite-function)
+  (define-key global-map (kbd "C-c T") #'your-other-function)
+#+end_src
+
+For faster access to frequently used commands, you can add them to Meow normal state:
+
+#+begin_src emacs-lisp
+  ;; Example of how to bind a single key in normal mode
+  (define-key meow-normal-state-keymap (kbd "T") #'your-other-function)
+#+end_src
+
+Call ~meow-cheatsheet~ to view currently assigned keys for a qwerty keyboard.
+
+Remember that single keys are precious resources in normal mode, so use them wisely (e.g., create menus that get prime locations)!
+
+*** Meow Keypad
+Meow's keypad feature provides a convenient way to access ~C-c~ commands without holding down Ctrl:
+
+1. Activate the keypad mode:
+   - Press ~h~ from normal mode
+   - Press ~SPC h~ from motion mode (e.g., in magit)
+   - Press ~C-c h~ or ~F5 h~ from anywhere
+2. Press any letter key (except x, c, g, h, m) and it will be translated to ~C-c~ + that letter
+
+The reserved keys in keypad mode (x, c, g, h, m) have special functions within Meow.
+
+*** Custom Menus
+You can create your own menus to group related commands for specific workflows:
+
+#+begin_src emacs-lisp
+  (easy-menu-define custom-menu global-map "Custom"
+    '("Custom"
+      ["Command 1" command-1 t]
+      ("Submenu"
+       ["Command 2" command-2 t]
+       ["Command 3" command-3 t])))
+#+end_src
+
+Most importantly, this configuration encourages exploration - use the tools provided to discover and define your own optimal workflow.

@@ -1,0 +1,559 @@
+* Package Management
+#+begin_src emacs-lisp
+  ;; Initialize package system
+  (require 'package)
+  (package-initialize)
+  
+  ;; Add MELPA repository for packages
+  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+
+  ;; Automatically install packages when using use-package
+  (require 'use-package-ensure)
+  (setq use-package-always-ensure t)
+#+end_src
+
+* Theme
+#+begin_src emacs-lisp
+  ;; Modus Vivendi is a dark theme with good contrast and accessibility
+  (load-theme 'modus-vivendi-tinted)
+#+end_src
+
+* Core Settings
+#+begin_src emacs-lisp
+  ;; Disable startup message
+  (setq inhibit-startup-message t)
+  
+  ;; Enable context menu
+  (context-menu-mode 1)
+
+  ;; Performance optimizations
+  (setq gc-cons-threshold 50000000)        ;; Increase garbage collection threshold
+  (setq large-file-warning-threshold 100000000)  ;; Increase large file threshold
+  
+  ;; Auto-revert files when changed externally
+  (global-auto-revert-mode t)
+
+  ;; Display line numbers
+  (global-display-line-numbers-mode)
+
+  ;; Remember cursor position in files
+  (save-place-mode t)
+
+  ;; Simplify yes/no prompts
+  (fset 'yes-or-no-p 'y-or-n-p)
+
+  ;; Use visual bell instead of audible
+  (setq visible-bell 1)
+
+  ;; Delete selection when typing
+  (delete-selection-mode 1)
+
+  ;; Use spaces instead of tabs
+  (set-default 'indent-tabs-mode nil)
+  
+  ;; Clean up whitespace on save
+  (add-hook 'before-save-hook 'whitespace-cleanup)
+
+  ;; Follow symlinks
+  (setq vc-follow-symlinks t)
+
+  ;; Keep track of recent files
+  (recentf-mode 1)
+
+  ;; Show completion preview
+  (global-completion-preview-mode)
+
+  ;; Visual undo tree
+  (use-package vundo)
+
+  ;; Show typed keys immediately
+  (setq echo-keystrokes 0.1)
+#+end_src
+
+* User Experience Improvements
+** Confusion Avoidance
+Snippets from here: https://protesilaos.com/codelog/2024-11-28-basic-emacs-configuration/
+#+begin_src emacs-lisp
+  ;; Do not show warnings mainly for developers
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*\\(Warnings\\|Compile-Log\\)\\*\\'"
+                 (display-buffer-no-window)
+                 (allow-no-window . t)))
+
+  (defun prot/keyboard-quit-dwim ()
+    "Do-What-I-Mean behaviour for a general `keyboard-quit'.
+
+  The generic `keyboard-quit' does not do the expected thing when
+  the minibuffer is open.  Whereas we want it to close the
+  minibuffer, even without explicitly focusing it.
+
+  The DWIM behaviour of this command is as follows:
+
+  - When the region is active, disable it.
+  - When a minibuffer is open, but not focused, close the minibuffer.
+  - When the Completions buffer is selected, close it.
+  - In every other case use the regular `keyboard-quit'."
+    (interactive)
+    (cond
+     ((region-active-p)
+      (keyboard-quit))
+     ((derived-mode-p 'completion-list-mode)
+      (delete-completion-window))
+     ((> (minibuffer-depth) 0)
+      (abort-recursive-edit))
+     (t
+      (keyboard-quit))))
+
+  (define-key global-map (kbd "C-g") #'prot/keyboard-quit-dwim)
+#+end_src
+
+** Backup Configuration
+#+begin_src emacs-lisp
+  ;; Configure backup settings
+  (setq backup-directory-alist '(("." . "~/.emacs.d/backup"))
+        backup-by-copying t    ; Don't delink hardlinks
+        version-control t      ; Use version numbers on backups
+        delete-old-versions t  ; Automatically delete excess backups
+        kept-new-versions 20   ; how many of the newest versions to keep
+        kept-old-versions 5    ; and how many of the old
+        )
+#+end_src
+* Vertico and friends
+** Vertico (vertical completion)
+#+begin_src emacs-lisp
+  ;; Enable vertical completion
+  (use-package vertico
+    :init
+    (vertico-mode))
+  (vertico-mouse-mode)
+
+  ;; Persist history over Emacs restarts
+  (use-package savehist
+    :init
+    (savehist-mode))
+
+  ;; A few more useful configurations...
+  (use-package emacs
+    :custom
+    ;; Support opening new minibuffers from inside existing minibuffers.
+    (enable-recursive-minibuffers t)
+    ;; Hide commands in M-x which do not work in the current mode.  Vertico
+    ;; commands are hidden in normal buffers. This setting is useful beyond
+    ;; Vertico.
+    (read-extended-command-predicate #'command-completion-default-include-p)
+    ;; Do not allow the cursor in the minibuffer prompt
+    (minibuffer-prompt-properties
+     '(read-only t cursor-intangible t face minibuffer-prompt)))
+#+end_src
+
+** Marginalia (Annotations)
+#+begin_src emacs-lisp
+  ;; Add annotations to completion candidates
+  (use-package marginalia
+    :config
+    (marginalia-mode))
+#+end_src
+
+** Consult (Enhanced Tools)
+#+begin_src emacs-lisp
+  (use-package consult)
+  (setq xref-show-xrefs-function #'consult-xref
+        xref-show-definitions-function #'consult-xref)
+#+end_src
+
+** Orderless (Completion Method)
+#+begin_src emacs-lisp
+  (use-package orderless
+    :custom
+    ;; Configure a custom style dispatcher (see the Consult wiki)
+    (completion-styles '(orderless basic))
+    (completion-category-defaults nil)
+    (completion-category-overrides '((file (styles partial-completion)))))
+#+end_src
+
+** Embark (Context Actions)
+#+begin_src emacs-lisp
+  ;; Context-dependent actions (like right-click menu)
+  (use-package embark
+    :bind
+    (("C-." . embark-act)
+     ("M-." . embark-dwim)
+     ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
+    )
+  (setq prefix-help-command #'embark-prefix-help-command)
+  (use-package embark-consult)
+#+end_src
+* Avy
+#+begin_src emacs-lisp
+  ;; Quick navigation to visible text
+  (use-package avy)
+#+end_src
+
+* Magit (Git Interface)
+#+begin_src emacs-lisp
+  (use-package magit)
+#+end_src
+
+* Modal Editing (Meow)
+** Core Setup
+#+begin_src emacs-lisp
+  (use-package meow)
+  (defun meow-setup ()
+    ;; Define text objects
+    (setq meow-char-thing-table
+          '((?( . round)
+              (?[ . square)
+              (?{ . curly)
+              (?w . string)
+              (?W . symbol)
+              (?b . buffer)
+              (?p . paragraph)
+              (?l . line)
+              (?d . defun)
+              (?. . sentence)))
+    
+    ;; Define normal mode keybindings
+    (meow-normal-define-key
+     ;; Expansion
+     '("0" . meow-expand-0)
+     '("1" . meow-expand-1)
+     '("2" . meow-expand-2)
+     '("3" . meow-expand-3)
+     '("4" . meow-expand-4)
+     '("5" . meow-expand-5)
+     '("6" . meow-expand-6)
+     '("7" . meow-expand-7)
+     '("8" . meow-expand-8)
+     '("9" . meow-expand-9)
+     '("-" . meow-reverse)
+
+     ;; Insertion
+     '("i" . meow-insert)
+     '("a" . meow-append)
+     '("o" . meow-open-below)
+     '("O" . meow-open-above)
+
+     ;; Line operations
+     '("l" . meow-line)
+
+     ;; Editing
+     '("k" . meow-kill)
+     '("w" . meow-save)
+     '("y" . meow-yank)
+     '("r" . meow-change)
+
+     ;; Undo/Redo
+     '("u" . undo-only)
+     '("U" . undo-redo)
+     '("V" . vundo)
+
+     ;; Quit
+     '("<escape>" . keyboard-quit)))
+  (require 'meow)
+  (meow-setup)
+
+  ;; Define mark and match prefix
+  (defvar-keymap mark-match-prefix-map
+    :doc "Mark and match prefix"
+    :prefix 'mark-match-prefix
+    "t" #'meow-till
+    "f" #'meow-find
+    "a" #'meow-bounds-of-thing
+    "i" #'meow-inner-of-thing
+    )
+  (define-key meow-normal-state-keymap (kbd "m") 'mark-match-prefix)
+
+  (setq meow-use-clipboard t)
+  (setq meow-expand-hint-remove-delay 2.0) ;; Disable by setting to 0.0
+  (meow-global-mode 1)
+
+  (put 'meow-yank 'delete-selection t) ;; Delete selection with meow-yank to make equivalent to C-y
+  (defun use-k-to-kill ()
+    "Message to use k to kill a selected region in normal mode."
+    (interactive)
+    (message "Use k to kill a selected region in normal mode"))
+  (define-key meow-normal-state-keymap (kbd "<delete>") #'use-k-to-kill)
+  (define-key meow-normal-state-keymap (kbd "DEL") #'use-k-to-kill)
+#+end_src
+
+** Expand Region
+#+begin_src emacs-lisp
+  ;; Smart region expansion
+  (use-package expand-region)
+#+end_src
+
+* Space Menu
+#+begin_src emacs-lisp
+  ;; Define space menu keybindings
+  (defvar-keymap space-menu-prefix-map
+    :doc "Space menu"
+    :prefix 'space-menu-prefix
+    ;; Intentionally put the more important ones to the bottom, such that they are at the top when the help (C-h) is invoked
+    "m" #'meow-keypad-start
+    "g" #'meow-keypad-start
+    "c" #'meow-keypad-start
+    "x" #'meow-keypad-start
+    "h" #'meow-keypad
+    "j" #'avy-goto-char-2
+    "G" #'magit-status
+    "K" #'embark-bindings
+    "s" #'consult-ripgrep
+    "F" #'consult-fd
+    "l" #'consult-line
+    "B" #'consult-bookmark
+    "a" #'mode-line-other-buffer
+    "t" #'tmm-menubar
+    "1" #'delete-other-windows
+    "0" #'delete-window
+    "r" #'split-window-right
+    "o" #'other-window
+    "b" #'consult-buffer
+    "f" #'find-file
+    "d" #'dired-jump
+    "E" #'execute-extended-command-for-buffer
+    "e" #'execute-extended-command
+    "?" #'cheatsheet-space-menu
+    )
+#+end_src
+
+* Keybindings
+#+begin_src emacs-lisp
+  ;; Toggle modal editing
+  (define-key global-map (kbd "<f6>") #'meow-global-mode)
+  ;; Space menu
+  (define-key global-map (kbd "<f5>") 'space-menu-prefix)
+  (define-key meow-motion-state-keymap (kbd "SPC") 'space-menu-prefix)
+  (define-key meow-normal-state-keymap (kbd "SPC") 'space-menu-prefix)
+  ;; Keypad
+  (setq meow-keypad-leader-dispatch "C-c") ;; In the keypad, any key <a> other than xcmgh will produce C-c <a>
+  (define-key global-map (kbd "C-c h") #'meow-keypad)
+
+  (define-key meow-normal-state-keymap (kbd "h") #'meow-keypad)
+  (define-key meow-normal-state-keymap (kbd "x") #'meow-keypad-start)
+  (define-key meow-normal-state-keymap (kbd "c") #'meow-keypad-start)
+  (define-key meow-normal-state-keymap (kbd "g") #'meow-keypad-start)
+
+  (define-key meow-normal-state-keymap (kbd "e") #'er/expand-region)
+  (define-key meow-normal-state-keymap (kbd "j") #'avy-goto-char-2)
+  (define-key meow-normal-state-keymap (kbd ".") #'embark-act)
+  
+  ;; Dired mouse binding
+  (define-key dired-mode-map [mouse-2] #'dired-mouse-find-file)
+#+end_src
+
+* Documentation
+** Cheatsheets
+#+begin_src emacs-lisp
+  ;; Modal editing cheatsheet
+  (require 'transient)
+  (transient-define-prefix cheatsheet-meow ()
+    "Cheatsheet for modal editing"
+    [["Quick navigation"
+      ("j" "Go char 2" avy-goto-char-2)
+      ]
+     ["Insert text"
+      ("i" "Insert" meow-insert)
+      ("a" "Append" meow-append)
+      ("o" "Insert below" meow-open-below)
+      ("O" "Insert above" meow-open-above)
+      ]
+     ["Selection"
+      ("l" "Line" meow-line)
+      ("e" "Expand region" er/expand-region)
+      ("m" "Mark/match" (lambda () (interactive) (message "i (inner), a (around), f (find), t (till)")))
+      ]
+     ["Action"
+      ("k" "Kill (Cut)" meow-kill)
+      ("r" "Replace" meow-change)
+      ("w" "Copy" meow-save)
+      ("y" "Yank (Paste)" meow-yank)
+      ("." "Contextual action" embark-act)
+      ]
+     ["Undo"
+      ("u" "Undo" undo-only)
+      ("U" "Redo" undo-redo)
+      ("V" "Visual undo" vundo)
+      ]
+     ["Keypad"
+      ("h" "Start keypad" meow-keypad)
+      ("x" "C-x C-" meow-keypad-start)
+      ("c" "C-c C-" meow-keypad-start)
+      ("g" "C-M-" meow-keypad-start)
+      ]
+     ])
+  (define-key meow-normal-state-keymap (kbd "?") #'cheatsheet-meow)
+
+  ;; Modifier commands cheatsheet
+  (transient-define-prefix cheatsheet-modifier-commands ()
+    "Cheatsheet for modifier commands"
+    [["Basic navigation"
+      ("C-n" "Next line" next-line)
+      ("C-p" "Previous line" previous-line)
+      ("C-f" "Forward char" forward-char)
+      ("C-b" "Backward char" backward-char)
+      ("M-f" "Forward word" forward-word)
+      ("M-b" "Backward word" backward-word)
+      ]
+     ["Line navigation"
+      ("C-a" "Beginning of line" move-beginning-of-line)
+      ("C-e" "End of line" move-end-of-line)
+      ("M-m" "First nonwhitespace" back-to-indentation)
+      ]
+     ["Current buffer navigation"
+      ("M-<" "Beginning of buffer" beginning-of-buffer)
+      ("M->" "End of buffer" end-of-buffer)
+      ("C-v" "Page down" scroll-up-command)
+      ("M-v" "Page up" scroll-down-command)
+      ("C-l" "Recenter" recenter-top-bottom)
+      ("M-r" "Go window center" move-to-window-line-top-bottom)
+      ]
+     ["Basic editing"
+      ("M-w" "Copy (write to kill-ring)" kill-ring-save)
+      ("C-y" "Paste (yank from kill-ring)" yank)
+      ("C-k" "Kill to line end" kill-line)
+      ("C-d" "Delete char" delete-char)
+      ("M-d" "Delete word (forward)" kill-word)
+      ("M-DEL" "Kill word (backward)" backward-kill-word)
+      ]
+     ["Misc"
+      ("C-s" "Search forward" isearch-forward)
+      ("C-r" "Search backward" isearch-backward)
+      ("M-." "Goto definiton" xref-find-definitions) ;; Use embark-dwim in this config which default to this on a symbol
+      ("M-," "Go back" xref-go-back)
+      ]
+     ["Help (with C-h prefix)"
+      ("m" "Mode" describe-mode)
+      ("f" "Function" describe-function)
+      ("v" "Variable" describe-variable)
+      ("k" "Key" describe-key)
+      ("t" "Tutorial" help-with-tutorial)
+      ]
+     ])
+  (define-key global-map (kbd "C-c m") #'cheatsheet-modifier-commands)
+
+  ;; Space menu cheatsheet
+  (transient-define-prefix cheatsheet-space-menu ()
+    "Cheatsheet for space menu"
+    [
+     ["Window"
+      ("o" "Other window" other-window)
+      ("r" "Split right" split-window-right)
+      ("0" "Delete window" delete-window)
+      ("1" "Delete other windows" delete-other-windows)
+      ]
+     ["Execute commands"
+      ("e" "Execute command" execute-extended-command)
+      ("E" "..for context" execute-extended-command-for-buffer)
+      ]
+     ["Quick navigation"
+      ("d" "Directory editor" dired-jump)
+      ("f" "Find file" find-file)
+      ("a" "Last buffer" mode-line-other-buffer)
+      ("j" "Go char 2" avy-goto-char-2)
+      ]
+     ["Consult"
+      ("b" "Buffer" consult-buffer)
+      ("B" "Bookmark" consult-bookmark)
+      ("l" "Line" consult-line)
+      ("F" "fd" consult-fd)
+      ("s" "ripgrep" consult-ripgrep)]
+     ["Misc"
+      ("t" "Key driven menu-bar" tmm-menubar)
+      ("j" "Go char 2" avy-goto-char-2)
+      ("G" "Git" magit-status)
+      ("K" "Contextual keybindings" embark-bindings)
+      ]
+     ["Keypad"
+      ("h" "Start keypad" meow-keypad)
+      ("x" "C-x C-" meow-keypad-start)
+      ("c" "C-c C-" meow-keypad-start)
+      ("g" "C-M-" meow-keypad-start)
+      ("m" "M-" meow-keypad-start)
+      ]])
+#+end_src
+
+** Documentation Functions
+#+begin_src emacs-lisp
+  ;; Helper function to show documentation files
+  (defun show-doc-file (file-name buffer-name)
+    "Show documentation file FILE-NAME in a buffer named BUFFER-NAME as a read-only copy."
+    (let ((buf (get-buffer-create buffer-name))
+          (file (concat "~/.emacs.d/documentation/" file-name)))
+      (with-current-buffer buf
+        (erase-buffer)
+        (insert-file-contents file)
+        (org-mode)
+        (setq buffer-read-only nil)
+        (setq-local buffer-offer-save nil)
+        (setq-local default-directory "~/"))
+      (switch-to-buffer buf)))
+
+  ;; Documentation access functions
+  (defun getting-started ()
+    "Show getting-started.org file in a read-only buffer."
+    (interactive)
+    (show-doc-file "getting-started.org" "*Getting Started*"))
+
+  (defun guided-tour ()
+    "Show guided-tour.org file in a read-only buffer."
+    (interactive)
+    (show-doc-file "guided-tour.org" "*Guided Tour*"))
+
+  (defun further-learning ()
+    "Show further-learning.org file in a read-only buffer."
+    (interactive)
+    (show-doc-file "further-learning.org" "*Further learning*"))
+
+  (defun configuration ()
+    "Show configuration.org file in a read-only buffer."
+    (interactive)
+    (show-doc-file "configuration.org" "*Configuration*"))
+#+end_src
+
+** Menu Bar
+#+begin_src emacs-lisp
+  ;; Define main menu
+  (easy-menu-define main-menu-item global-map "Main"
+    '("Main"
+      ["Space menu" cheatsheet-space-menu t]
+      ["Modifier commands" cheatsheet-modifier-commands t]
+      ["Modal editing" cheatsheet-meow t]
+      ("Documentation"
+       ["Getting started" getting-started t]
+       ["Guided tour" guided-tour t]
+       ["Further learning" further-learning t]
+       ["Configuration" configuration t]
+       )
+      ["File tree (speedbar)" speedbar t]
+      ("Describe commands"
+       ["Mode" describe-mode t]
+       ["Key" describe-key t]
+       ["Function" describe-function t]
+       ["Variable" describe-variable t]
+       )
+      ("Toggles"
+       ["Modal editing" meow-global-mode t]
+       ["Tab bar" tab-bar-mode t]
+       ["Line numbers" global-display-line-numbers-mode t]
+       ["Completion in buffer" vertico-buffer-mode t])
+      ("Nice consult functions"
+       ["Outline" consult-outline t]
+       ["Copy from kill ring" consult-yank-pop t]
+       ["Symbols (imenu)" consult-imenu]
+       ["Diagnostics (flymake)" consult-flymake t]
+       ["History" consult-history t]
+       ["Info" consult-info t]
+       ["Focus lines (rerun empty to unfocus)" consult-focus-lines t]
+       ["Change theme" consult-theme t]
+       )
+      ))
+  (define-key meow-normal-state-keymap (kbd "t") #'tmm-menubar)
+#+end_src
+
+* Custom Configuration
+#+begin_src emacs-lisp
+  ;; Load custom configuration if it exists
+  (let ((custom-file "~/.emacs.d/custom.org"))
+    (when (file-exists-p custom-file)
+      (org-babel-load-file custom-file)))
+#+end_src

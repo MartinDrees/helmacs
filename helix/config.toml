@@ -1,0 +1,305 @@
+# This is a helix configuration file using keybindings as the emacs setup following the core editor specification.
+# Cheatsheets can be accessed via ? (modal editing) and C-h (modifier commands).
+theme = "modus_vivendi_tinted" #If you do not find it too bad, try this theme (or in general one of the modus themes)
+
+[editor]
+bufferline = "multiple"
+mouse = true
+true-color = true
+lsp.display-inlay-hints = true
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+select = "underline"
+
+[keys.normal]
+#Custom
+#Keys that are free to bind in normal mode are p, n, f, b. You can for example use them for cursors or word movement if modifier keys are too cumbersome. (next, previous, forward, backward)
+
+#Edinorm
+k = "delete_selection"
+r = "change_selection"
+w = "yank"
+y = "paste_after"
+Y = "paste_before"
+l = "extend_line_below"
+e = "expand_selection"
+E = "shrink_selection"
+j = "goto_word"
+esc = "collapse_selection"
+"/" = ":sh echo 'use C-s'"
+b = ":sh echo 'use A-f and A-b for word movement'"
+B = ":sh echo 'use A-f and A-b for word movement'"
+W = ":sh echo 'use A-f and A-b for word movement'"
+g = ":sh echo 'Try using the modifier commands (C-h for cheatsheet). If really necessary, you can enable this again'"
+f = ":sh echo 'Do you really need this? Try without and enable if you really need it.'"
+F = ":sh echo 'Do you really need this? Try without and enable if you really need it.'"
+t = ":sh echo 'Do you really need this? Try without and enable if you really need it.'"
+T = ":sh echo 'Do you really need this? Try without and enable if you really need it.'"
+p = ":sh echo 'Use y to paste'"
+P = ":sh echo 'Use Y to paste before'"
+
+
+#These are modified commands, which can be used in insert, normal and select mode.
+C-b = "move_char_left" #backward
+C-f = "move_char_right" #forward
+C-p = "move_visual_line_up" #previous
+C-n = "move_visual_line_down" #next-line
+A-b = "move_prev_word_start" #Alt: for words
+A-f = "move_next_word_start" #Alt: for words
+C-a = "goto_line_start"
+C-e = "goto_line_end"
+A-m = "goto_first_nonwhitespace"
+C-k = "kill_to_line_end" #cut (kill)
+A-w = "yank" #copy (write to kill-ring)
+C-y = "paste_after" #paste (yank from kill-ring)
+C-s = "search"
+C-r = "rsearch"
+"A-<" = "goto_file_start"
+"A->" = "goto_last_line"
+C-v = "page_down"
+A-v = "page_up"
+C-l = "align_view_center"
+A-r = "goto_window_center"
+C-d = "delete_char_forward"
+A-d = "delete_word_forward" #Alt: for words
+A-backspace = "delete_word_backward" #Alt: for words
+A-x = "command_palette"
+"A-." = "goto_definition"
+"A-," = "jump_backward"
+
+C-A-f = "move_next_long_word_start"
+C-A-b = "move_prev_long_word_start"
+
+[keys.select]
+k = "delete_selection"
+r = "change_selection"
+w = "yank"
+l = "extend_to_line_bounds"
+e = "expand_selection"
+E = "shrink_selection"
+j = "goto_word"
+"/" = ":sh echo 'use C-s'"
+b = ":sh echo 'use A-f and A-b for word movement'"
+B = ":sh echo 'use A-f and A-b for word movement'"
+W = ":sh echo 'use A-f and A-b for word movement'"
+g = ":sh echo 'Try using the modifier commands. If really necessary, you can enable this again'"
+f = ":sh echo 'Do you really need this? Try without and enable if you really need it.'"
+F = ":sh echo 'Do you really need this? Try without and enable if you really need it.'"
+t = ":sh echo 'Do you really need this? Try without and enable if you really need it.'"
+T = ":sh echo 'Do you really need this? Try without and enable if you really need it.'"
+p = ":sh echo 'Use y to paste'"
+P = ":sh echo 'Use Y to paste before'"
+
+#These are modified commands, which can be used in insert, normal and select mode.
+C-b = "move_char_left" #backward
+C-f = "move_char_right" #forward
+C-p = "move_visual_line_up" #previous
+C-n = "move_visual_line_down" #next-line
+A-b = "move_prev_word_start" #Alt: for words
+A-f = "move_next_word_start" #Alt: for words
+C-a = "goto_line_start"
+C-e = "goto_line_end"
+A-m = "goto_first_nonwhitespace"
+C-k = "kill_to_line_end" #cut (kill)
+A-w = "yank" #copy (write to kill-ring)
+C-y = "paste_after" #paste (yank from kill-ring)
+C-s = "search"
+C-r = "rsearch"
+"A-<" = "goto_file_start"
+"A->" = "goto_last_line"
+C-v = "page_down"
+A-v = "page_up"
+C-l = "align_view_center"
+A-r = "goto_window_center"
+C-d = "delete_char_forward"
+A-d = "delete_word_forward" #Alt: for words
+A-backspace = "delete_word_backward" #Alt: for words
+A-x = "command_palette"
+"A-." = "goto_definition"
+"A-," = "jump_backward"
+
+C-A-f = "move_next_long_word_start"
+C-A-b = "move_prev_long_word_start"
+
+
+[keys.normal.h]
+#Use this prefix for your custom commands
+
+[keys.normal.x]
+s = ":w"
+f = "file_picker"
+c = ":quit-all"
+1 = "wonly"
+2 = "hsplit"
+
+[keys.normal."C-x"]
+u = "undo"
+C-s = ":w"
+C-f = "file_picker"
+C-c = ":quit-all"
+o = "rotate_view"
+1 = "wonly"
+2 = "hsplit"
+
+[keys.normal."C-."]
+ret = "goto_definition"
+r = "goto_reference"
+
+[keys.insert."C-x"]
+u = "undo"
+C-s = ":w"
+C-f = "file_picker"
+C-c = ":quit-all"
+o = "rotate_view"
+1 = "wonly"
+2 = "hsplit"
+
+[keys.insert."C-."]
+ret = "goto_definition"
+r = "goto_reference"
+
+
+[keys.insert]
+#These are modified commands, which can be used in insert, normal and select mode.
+C-b = "move_char_left" #backward
+C-f = "move_char_right" #forward
+C-p = "move_visual_line_up" #previous
+C-n = "move_visual_line_down" #next-line
+A-b = "move_prev_word_start" #Alt: for words
+A-f = "move_next_word_start" #Alt: for words
+C-a = "goto_line_start"
+C-e = "goto_line_end"
+A-m = "goto_first_nonwhitespace"
+C-k = "kill_to_line_end" #cut (kill)
+A-w = "yank" #copy (write to kill-ring)
+C-y = "paste_after" #paste (yank from kill-ring)
+C-s = "search"
+C-r = "rsearch"
+"A-<" = "goto_file_start"
+"A->" = "goto_last_line"
+C-v = "page_down"
+A-v = "page_up"
+C-l = "align_view_center"
+A-r = "goto_window_center"
+C-d = "delete_char_forward"
+A-d = "delete_word_forward" #Alt: for words
+A-backspace = "delete_word_backward" #Alt: for words
+A-x = "command_palette"
+"A-." = "goto_definition"
+"A-," = "jump_backward"
+
+C-A-f = "move_next_long_word_start"
+C-A-b = "move_prev_long_word_start"
+
+[keys.normal.space]
+# Prefer to not use the following reserved keys (in general, prefer to use the h menu in normal mode for editing specific custom commands):
+# d - Directory editor
+# x, c - Better prefix access
+e = "command_palette"
+r = "vsplit"
+1 = "wonly"
+a = "goto_last_accessed_file"
+s = "global_search"
+o = "rotate_view"
+E = "no_op"
+j = "no_op"
+S = "no_op"
+d = "no_op"
+D = "no_op"
+R = "no_op"
+g = "no_op"
+G = "no_op"
+w = "no_op"
+y = "no_op"
+Y = "no_op"
+p = "no_op"
+P = "no_op"
+k = "no_op"
+h = "no_op"
+c = "no_op"
+C = "no_op"
+"A-c" = "no_op"
+"?" = ":sh echo 'use SPC e'"
+"'" = "no_op"
+"/" = "no_op"
+
+[keys.normal."?"]
+"?" = ":sh echo 'use C-r for backward search'"
+i = "insert_mode"
+a = "append_mode"
+o = "open_below"
+O = "open_above"
+l = "extend_line_below"
+e = "expand_selection"
+E = "shrink_selection"
+k = "delete_selection"
+r = "change_selection"
+w = "yank"
+y = "paste_after"
+u = "undo"
+U = "redo"
+j = "goto_word"
+esc = "collapse_selection"
+
+[keys.insert."C-h"]
+#These are modified commands, which can be used in insert, normal and select mode.
+"?" = ":sh echo 'For an interactive tutorial of most of these commands, you can try out the emacs built-in tutorial (start emacs -q, then C-h t).'"
+C-b = "move_char_left" #backward
+C-f = "move_char_right" #forward
+C-p = "move_visual_line_up" #previous
+C-n = "move_visual_line_down" #next-line
+A-b = "move_prev_word_start" #Alt: for words
+A-f = "move_next_word_start" #Alt: for words
+C-a = "goto_line_start"
+C-e = "goto_line_end"
+A-m = "goto_first_nonwhitespace"
+C-k = "kill_to_line_end" #cut (kill)
+A-w = "yank" #copy (write to kill-ring)
+C-y = "paste_after" #paste (yank from kill-ring)
+C-s = "search"
+C-r = "rsearch"
+"A-<" = "goto_file_start"
+"A->" = "goto_last_line"
+C-v = "page_down"
+A-v = "page_up"
+C-l = "align_view_center"
+A-r = "goto_window_center"
+C-d = "delete_char_forward"
+A-d = "delete_word_forward" #Alt: for words
+A-backspace = "delete_word_backward" #Alt: for words
+A-x = "command_palette"
+"A-." = "goto_definition"
+"A-," = "jump_backward"
+
+
+[keys.normal."C-h"]
+#These are modified commands, which can be used in insert, normal and select mode.
+"?" = ":sh echo 'For an interactive tutorial of most of these commands, you can try out the emacs built-in tutorial (start emacs -q, then C-h t).'"
+C-b = "move_char_left" #backward
+C-f = "move_char_right" #forward
+C-p = "move_visual_line_up" #previous
+C-n = "move_visual_line_down" #next-line
+A-b = "move_prev_word_start" #Alt: for words
+A-f = "move_next_word_start" #Alt: for words
+C-a = "goto_line_start"
+C-e = "goto_line_end"
+A-m = "goto_first_nonwhitespace"
+C-k = "kill_to_line_end" #cut (kill)
+A-w = "yank" #copy (write to kill-ring)
+C-y = "paste_after" #paste (yank from kill-ring)
+C-s = "search"
+C-r = "rsearch"
+"A-<" = "goto_file_start"
+"A->" = "goto_last_line"
+C-v = "page_down"
+A-v = "page_up"
+C-l = "align_view_center"
+A-r = "goto_window_center"
+C-d = "delete_char_forward"
+A-d = "delete_word_forward" #Alt: for words
+A-backspace = "delete_word_backward" #Alt: for words
+A-x = "command_palette"
+"A-." = "goto_definition"
+"A-," = "jump_backward"

@@ -1,0 +1,54 @@
+Welcome! This configuration combines (optional) modal editing efficiency with powerful discovery tools. The guide below will help you get started with essential concepts and commands.
+
+* Essential Commands
+- ~C-g~ (Control-g) :: Cancel current operation (very important!)
+- ~M-x~ (Meta/Alt-x) :: Execute command (you can also use ~e~ in Space menu)
+- ~SPC~ (type <space>) :: Space menu, the core entry point of this configuration
+  In Space menu:
+  - ~?~ :: open a cheatsheet with categories
+  - ~C-h~ :: start vertical completion
+  - Type the key directly, if you already know it
+- ~?~ :: Cheatsheet for modal editing
+- ~ESC~ :: Exit insert mode or cancel operations
+
+* Guided Tour
+Try the "Guided tour" in "Main -> Documentation" in the menu bar.
+
+* Navigation summary
+Here is a quick summary of navigation commands for different scopes:
+|---------------------------+------------------------------+---------|
+| Basic movement            | cheatsheet-modifier-commands | ~C-c m~ |
+| Screen                    | avy-goto-char-2              | ~SPC j~ |
+| Line in file              | consult-line                 | ~SPC l~ |
+| Line in project/recursive | consult-ripgrep              | ~SPC s~ |
+| File                      | find-file                    | ~SPC f~ |
+| File in project/recursive | consult-fd                   | ~SPC F~ |
+| Buffer (or recent file)   | consult-buffer               | ~SPC b~ |
+| Bookmark                  | consult-bookmark             | ~SPC B~ |
+|---------------------------+------------------------------+---------|
+
+
+* Exploring emacs
+- Explore the "Main" item in the menu bar (~t~ in normal mode or from Space menu for keyboard-driven interface)
+- Explore the Space menu
+- ~M-x~ :: search for any command (orderless completion, use space between substrings)
+
+* Important Embark Actions (Context Menu)
+When using ~embark-act~ (~C-.~ or ~.~ in normal mode):
+- ~C-h~ :: Vertical completion (allows to search actions)
+- ~embark-export~ :: Export selected items to a new buffer
+
+* Core Emacs Concepts
+| Term       | Description                                                                                              |
+|------------+----------------------------------------------------------------------------------------------------------|
+| Buffer     | Text container (may be linked to a file or temporary)                                                    |
+| Window     | A view into a buffer                                                                                     |
+| Frame      | The entire Emacs application window                                                                      |
+| Point      | Cursor position (always between characters)                                                              |
+| Mark       | Invisible position marker setting one end of the region (see below)                                      |
+| Region     | Selected text between point and mark                                                                     |
+| Kill       | Cut (text is saved to the kill ring)                                                                     |
+| Yank       | Paste (inserts text from kill ring)                                                                      |
+| Major Mode | Primary editing mode for a buffer; determines syntax highlighting, indentation, and specialized commands |
+| Minor Mode | Additional feature that can be enabled in any buffer; adds functionality without changing the major mode |
+| Minibuffer | Command/input area at the bottom of the frame                                                            |

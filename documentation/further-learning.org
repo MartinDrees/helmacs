@@ -1,0 +1,47 @@
+* Further Learning
+Once you're comfortable with the basics, here's a recommended learning path:
+
+** Help System
+Emacs has a comprehensive built-in help system that you can access anytime:
+
+Key help functions:
+- ~describe-mode~ (~C-h m~): Help for current major mode
+- ~describe-function~ (~C-h f~): Shows documentation for any Emacs function
+- ~describe-key~ (~C-h k~): Shows what command a key combination runs
+- ~describe-variable~ (~C-h v~): Shows documentation for any Emacs variable
+
+Try this help example:
+1. Press ~C-h k~ to start ~describe-key~
+2. Press ~M-x~ when prompted for a key
+3. A help buffer appears showing information about the ~execute-extended-command~ function
+4. Press ~q~ to quit the help buffer
+
+The help system is a powerful way to discover Emacs functionality and learn while you work.
+
+** Built-in Emacs Tutorial
+Access the interactive tutorial that helps you learn the basic modifier commands:
+- Type ~C-h t~ or ~M-x help-with-tutorial~
+- Note: ~C-g~ still works as expected and you can use the keypad for key combinations
+
+** Mode-Specific Help
+Get context-specific documentation for the mode you're currently using:
+- Type ~C-h m~ (~describe-mode~) to view documentation for the current major mode
+- Try this in different buffers (Org, Dired, Magit) to learn mode-specific commands
+
+** Emacs Info System
+Explore Emacs' comprehensive documentation:
+- Type ~C-h i~ to access the Info directory
+- Start with ~C-h m~ to learn about your current mode first
+
+** Mode-Specific Manuals
+For deeper understanding, work through (parts of) dedicated manuals in the Info system:
+- Emacs (comprehensive guide to all Emacs features)
+- Emacs Lisp (learn to customize Emacs with code)
+- Dired
+- Magit
+- Org Mode
+
+** Understanding the Configuration
+To master this setup:
+- Examine ~myinit.org~ and ~custom.org~ to understand the configuration
+- Try making small modifications to customize it
