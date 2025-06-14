@@ -1,9 +1,8 @@
-# This is a helix configuration file using keybindings as the emacs setup following the core editor specification.
+# This is a helix configuration file using keybindings with the same common core as an emacs setup.
 # Cheatsheets can be accessed via ? (modal editing) and C-h (modifier commands).
-theme = "modus_vivendi_tinted" #If you do not find it too bad, try this theme (or in general one of the modus themes)
+theme = "modus_vivendi_tinted"
 
 [editor]
-bufferline = "multiple"
 mouse = true
 true-color = true
 lsp.display-inlay-hints = true
@@ -14,10 +13,10 @@ normal = "block"
 select = "underline"
 
 [keys.normal]
-#Custom
-#Keys that are free to bind in normal mode are p, n, f, b. You can for example use them for cursors or word movement if modifier keys are too cumbersome. (next, previous, forward, backward)
+#Custom (add additional keybindings)
+#Keys that are definitely free to bind in normal mode are p, n, f, b. You can for example use them for cursors or word movement if modifier keys are too cumbersome. (next, previous, forward, backward)
 
-#Edinorm
+#Changes
 k = "delete_selection"
 r = "change_selection"
 w = "yank"
@@ -28,15 +27,17 @@ e = "expand_selection"
 E = "shrink_selection"
 j = "goto_word"
 esc = "collapse_selection"
+
+#Helpers for migration from helix
 "/" = ":sh echo 'use C-s'"
 b = ":sh echo 'use A-f and A-b for word movement'"
 B = ":sh echo 'use A-f and A-b for word movement'"
 W = ":sh echo 'use A-f and A-b for word movement'"
 g = ":sh echo 'Try using the modifier commands (C-h for cheatsheet). If really necessary, you can enable this again'"
-f = ":sh echo 'Do you really need this? Try without and enable if you really need it.'"
-F = ":sh echo 'Do you really need this? Try without and enable if you really need it.'"
-t = ":sh echo 'Do you really need this? Try without and enable if you really need it.'"
-T = ":sh echo 'Do you really need this? Try without and enable if you really need it.'"
+f = ":sh echo 'Do you really need this? Try without and enable (or add in match mode) if you really need it.'"
+F = ":sh echo 'Do you really need this? Try without and enable (or add in match mode) if you really need it.'"
+t = ":sh echo 'Do you really need this? Try without and enable (or add in match mode) if you really need it.'"
+T = ":sh echo 'Do you really need this? Try without and enable (or add in match mode) if you really need it.'"
 p = ":sh echo 'Use y to paste'"
 P = ":sh echo 'Use Y to paste before'"
 
@@ -80,15 +81,16 @@ l = "extend_to_line_bounds"
 e = "expand_selection"
 E = "shrink_selection"
 j = "goto_word"
+
 "/" = ":sh echo 'use C-s'"
 b = ":sh echo 'use A-f and A-b for word movement'"
 B = ":sh echo 'use A-f and A-b for word movement'"
 W = ":sh echo 'use A-f and A-b for word movement'"
 g = ":sh echo 'Try using the modifier commands. If really necessary, you can enable this again'"
-f = ":sh echo 'Do you really need this? Try without and enable if you really need it.'"
-F = ":sh echo 'Do you really need this? Try without and enable if you really need it.'"
-t = ":sh echo 'Do you really need this? Try without and enable if you really need it.'"
-T = ":sh echo 'Do you really need this? Try without and enable if you really need it.'"
+f = ":sh echo 'Do you really need this? Try without and enable (or add in match mode) if you really need it.'"
+F = ":sh echo 'Do you really need this? Try without and enable (or add in match mode) if you really need it.'"
+t = ":sh echo 'Do you really need this? Try without and enable (or add in match mode) if you really need it.'"
+T = ":sh echo 'Do you really need this? Try without and enable (or add in match mode) if you really need it.'"
 p = ":sh echo 'Use y to paste'"
 P = ":sh echo 'Use Y to paste before'"
 
@@ -143,7 +145,7 @@ o = "rotate_view"
 1 = "wonly"
 2 = "hsplit"
 
-[keys.normal."C-."]
+[keys.normal."C-."] #Ideally, also just "." should do this, but rebinding "." is currently not supported
 ret = "goto_definition"
 r = "goto_reference"
 
@@ -200,6 +202,7 @@ C-A-b = "move_prev_long_word_start"
 e = "command_palette"
 r = "vsplit"
 1 = "wonly"
+0 = "wclose"
 a = "goto_last_accessed_file"
 s = "global_search"
 o = "rotate_view"
