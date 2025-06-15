@@ -2,6 +2,43 @@
 
 Helmacs provides a unified, beginner-friendly configuration for both [Helix](https://helix-editor.com/) and [Emacs](https://www.gnu.org/software/emacs/), designed to make these powerful editors accessible to newcomers while maintaining their flexibility and power.
 
+## Setup
+
+### Helix
+1. Clone this repository
+2. Run Helix with the configuration:
+   ```bash
+   helix -c /path/to/helmacs/helix/config.toml
+   ```
+
+### Emacs
+
+#### Test setup
+
+1. Clone this repository
+2. Run the following in a terminal
+   ```bash
+   emacs --init-directory=/path/to/cloned/helmacs/emacs/
+   ```
+
+#### Permanent setup
+
+1. Clone this repository
+2. Create or update your Emacs configuration directory:
+   ```bash
+   # Create the directory if it doesn't exist (backup if it does)
+   mkdir -p ~/.emacs.d
+
+   # Copy the configuration files
+   cp /path/to/helmacs/emacs/init.el ~/.emacs.d/
+
+   # Symlink myinit.org and documentation folder
+   ln -s /path/to/helmacs/emacs/myinit.org ~/.emacs.d/
+   ln -s /path/to/helmacs/documentation ~/.emacs.d/
+   ```
+3. Start Emacs
+4. For detailed setup and usage instructions, see: Main -> Documentation -> Getting started
+
 ## Why Helmacs?
 
 Helix and Emacs represent two ends of the editor spectrum: Helix offers a streamlined, out-of-the-box experience with minimal configuration, while Emacs is renowned for its deep customizability and extensibility. With Helmacs, you can use Helix for a fast, ready-to-use workflow, and seamlessly fall back to Emacs when you need advanced features or custom workflows that Helix may not (yet) provide. This approach gives you the best of both worlds—simplicity when you want it, and power when you need it.
@@ -111,43 +148,6 @@ Helmacs uses a reduced, intuitive, and consistent set of keybindings—the "core
 | d     | Directory editor       |
 | x,c   | Prefix commands        |
 | j     | Jump                   |
-
-## Setup
-
-### Helix
-1. Clone this repository
-2. Run Helix with the configuration:
-   ```bash
-   helix -c /path/to/helmacs/helix/config.toml
-   ```
-
-### Emacs
-
-#### Test setup
-
-1. Clone this repository
-2. Run the following in a terminal
-   ```bash
-   emacs --init-directory=/path/to/cloned/helmacs/emacs/
-   ```
-
-#### Permanent setup
-
-1. Clone this repository
-2. Create or update your Emacs configuration directory:
-   ```bash
-   # Create the directory if it doesn't exist (backup if it does)
-   mkdir -p ~/.emacs.d
-   
-   # Copy the configuration files
-   cp /path/to/helmacs/emacs/init.el ~/.emacs.d/
-   
-   # Symlink myinit.org and documentation folder
-   ln -s /path/to/helmacs/emacs/myinit.org ~/.emacs.d/
-   ln -s /path/to/helmacs/documentation ~/.emacs.d/
-   ```
-3. Start Emacs
-4. For detailed setup and usage instructions, see: Main -> Documentation -> Getting started
 
 ## License
 
