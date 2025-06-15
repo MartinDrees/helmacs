@@ -8,7 +8,7 @@ Helmacs provides a unified, beginner-friendly configuration for both [Helix](htt
 1. Clone this repository
 2. Run Helix with the configuration:
    ```bash
-   helix -c /path/to/helmacs/helix/config.toml
+   helix -c /path/to/cloned/helmacs/helix/config.toml
    ```
 
 ### Emacs
@@ -30,11 +30,11 @@ Helmacs provides a unified, beginner-friendly configuration for both [Helix](htt
    mkdir -p ~/.emacs.d
 
    # Copy the configuration files
-   cp /path/to/helmacs/emacs/init.el ~/.emacs.d/
+   cp /path/to/cloned/helmacs/emacs/init.el ~/.emacs.d/
 
    # Symlink myinit.org and documentation folder
-   ln -s /path/to/helmacs/emacs/myinit.org ~/.emacs.d/
-   ln -s /path/to/helmacs/documentation ~/.emacs.d/
+   ln -s /path/to/cloned/helmacs/emacs/myinit.org ~/.emacs.d/
+   ln -s /path/to/cloned/helmacs/documentation ~/.emacs.d/
    ```
 3. Start Emacs
 4. For detailed setup and usage instructions, see: Main -> Documentation -> Getting started
