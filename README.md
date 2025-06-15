@@ -122,6 +122,17 @@ Helmacs uses a reduced, intuitive, and consistent set of keybindings—the "core
    ```
 
 ### Emacs
+
+#### Test setup
+
+1. Clone this repository
+2. Run the following in a terminal
+   ```bash
+   emacs --init-directory=/path/to/cloned/helmacs/emacs/
+   ```
+
+#### Permanent setup
+
 1. Clone this repository
 2. Create or update your Emacs configuration directory:
    ```bash
