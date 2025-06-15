@@ -548,6 +548,8 @@ Snippets from here: https://protesilaos.com/codelog/2024-11-28-basic-emacs-confi
        )
       ))
   (define-key meow-normal-state-keymap (kbd "t") #'tmm-menubar)
+
+  (setq tmm-completion-prompt nil)
 #+end_src
 
 * Custom Configuration
