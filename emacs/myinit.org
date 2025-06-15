@@ -110,7 +110,7 @@ Snippets from here: https://protesilaos.com/codelog/2024-11-28-basic-emacs-confi
 ** Backup Configuration
 #+begin_src emacs-lisp
   ;; Configure backup settings
-  (setq backup-directory-alist '(("." . "~/.emacs.d/backup"))
+  (setq backup-directory-alist '(("." . (locate-user-emacs-file "backup")))
         backup-by-copying t    ; Don't delink hardlinks
         version-control t      ; Use version numbers on backups
         delete-old-versions t  ; Automatically delete excess backups
@@ -478,7 +478,7 @@ Snippets from here: https://protesilaos.com/codelog/2024-11-28-basic-emacs-confi
   (defun show-doc-file (file-name buffer-name)
     "Show documentation file FILE-NAME in a buffer named BUFFER-NAME as a read-only copy."
     (let ((buf (get-buffer-create buffer-name))
-          (file (concat "~/.emacs.d/documentation/" file-name)))
+          (file (expand-file-name file-name (locate-user-emacs-file "documentation/"))))
       (with-current-buffer buf
         (erase-buffer)
         (insert-file-contents file)
@@ -555,7 +555,7 @@ Snippets from here: https://protesilaos.com/codelog/2024-11-28-basic-emacs-confi
 * Custom Configuration
 #+begin_src emacs-lisp
   ;; Load custom configuration if it exists
-  (let ((custom-file "~/.emacs.d/custom.org"))
+  (let ((custom-file (locate-user-emacs-file "custom.org")))
     (when (file-exists-p custom-file)
       (org-babel-load-file custom-file)))
 #+end_src
